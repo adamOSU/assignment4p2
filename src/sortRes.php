@@ -18,7 +18,7 @@ echo '<!DOCTYPE html>
 	<body>		<form action="addMovie.php" method="get">
 			Title: <input type="text" name="title" required="required"><br>
 			Category: <input type="text" name="cat"><br>
-			Length: <input type="number" name="len"><br>
+			Length: <input type="number" name="len" min="1"><br>
 			<input type="submit" value="Add Movie"><br>
 		</form><br><br>';
 
@@ -29,7 +29,10 @@ $stmt->execute();
 $stmt->bind_result($catRes);
 while ($stmt->fetch())
 {
-	echo "<option value=\"$catRes\">$catRes</option>";
+	if ($catRes != "")
+	{
+		echo "<option value=\"$catRes\">$catRes</option>";
+	}
 }
 $stmt->close();
 
