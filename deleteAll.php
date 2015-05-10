@@ -5,11 +5,7 @@ if ($mysqli->connect_errno)
 	echo "Connection error ".$mysqli->connect_errno ." ".$mysqli->connect_error;
 }
 
-$did = $_GET["delete"];
-
-
-$stmt = $mysqli->prepare("DELETE FROM Movies WHERE id=?");
-$stmt->bind_param("i", $did);
+$stmt = $mysqli->prepare("DELETE FROM Movies");
 $stmt->execute();
 $stmt->close();
 
