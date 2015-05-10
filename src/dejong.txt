@@ -5,3 +5,11 @@ Tasks: Watched videos and successfully created a php file that connects to my lo
 Start: Fri, 8 May 2015 20:00:00 -0800
 End: Sat, 9 May 2015 01:16:00 -0800
 Tasks: Created a basic HTML form to submit movie data. Created a movies table in my database.  Created a php file that adds the form information as a new entry into my movies table.  Added the ability to see all of the movies on an html page.  Added the ability to filter movies by category.  Added the Check In/Check Out button and functionality.  Added the delete movie button and functionality.
+
+Start: Sun, 10 May 2015 00:00:00 -0800
+End: Sun, 10 May 2015 01:31:00 -0800
+Tasks: Changes 0/1s to Checked Out/Available.  Added delete all button and functionality. Fixed the dropdown so the All Movies option works.
+
+Start: Sun, 10 May 2015 13:30:00 -0800
+End: Sun, 10 May 2015 15:00:00 -0800
+Tasks:  Finished form field validation.  Added some css to the table.  Cleaned up code, added comments to make it more readable.  Uploaded and QA'd on OSU servers.

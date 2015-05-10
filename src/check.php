@@ -1,28 +1,49 @@
 <?php
-$mysqli = new mysqli("localhost", "root", "", "testdb");
+$mysqli = new mysqli("oniddb.cws.oregonstate.edu", "dejonga-db", "KlZLMGQrHb0blbkw", "dejonga-db");
 if ($mysqli->connect_errno)
 {
 	echo "Connection error ".$mysqli->connect_errno ." ".$mysqli->connect_error;
 }
 
-$cat = $_GET["category"];
+foreach ($_GET as $key=>$value)
+{
+	$item = intval($key);
+	$bVal = intval($value);
+}
+
+//takes the rented value of the selected movie and swaps it.
+if ($bVal == 0)
+{
+	$stmt = $mysqli->prepare("UPDATE Movies SET rented=1 WHERE id=?");
+}
+elseif ($bVal == 1) 
+{
+	$stmt = $mysqli->prepare("UPDATE Movies SET rented=0 WHERE id=?");
+}
+$stmt->bind_param("i", $item);
+$stmt->execute();
+$stmt->close();
 
 echo '<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
 		<title>Assignment 4</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 
-	<body>		<form action="addMovie.php" method="get">
-			Title: <input type="text" name="title"><br>
+	<body>
+
+
+		<form action="addMovie.php" method="get">
+			Title: <input type="text" name="title" required="required"><br>
 			Category: <input type="text" name="cat"><br>
 			Length: <input type="number" name="len"><br>
 			<input type="submit" value="Add Movie"><br>
-		</form>';
+		</form><br><br>';
 
+//selects the distinct categories in the list and outputs them into a dropdown menu
 echo '<form action="sortRes.php" method="get"><select name="category"><option value="all">All Movies</option>';
-
 $stmt = $mysqli->prepare("SELECT DISTINCT category FROM Movies");
 $stmt->execute();
 $stmt->bind_result($catRes);
@@ -30,10 +51,10 @@ while ($stmt->fetch())
 {
 	echo "<option value=\"$catRes\">$catRes</option>";
 }
+
 $stmt->close();
 
 echo '</select><input type="submit" value="Sort"></form>';
-
 echo '<table>
   <tr>
     <th>Title</th>
@@ -42,19 +63,10 @@ echo '<table>
     <th>Rented</th>
   </tr>';
 
-if ($cat == 'all')
-{
-	$stmt = $mysqli->prepare("SELECT * FROM Movies");
-	$stmt->execute();
-	$stmt->bind_result($result1, $result2, $result3, $result4, $result5);
-}
-else
-{
-	$stmt = $mysqli->prepare("SELECT * FROM Movies WHERE category = ?");
-	$stmt->bind_param("s", $cat);
-	$stmt->execute();
-	$stmt->bind_result($result1, $result2, $result3, $result4, $result5);
-}
+//queries the database and prints out all movies into a table
+$stmt = $mysqli->prepare("SELECT * FROM Movies");
+$stmt->execute();
+$stmt->bind_result($result1, $result2, $result3, $result4, $result5);
 
 while ($stmt->fetch())
 {
@@ -70,13 +82,10 @@ while ($stmt->fetch())
 	}
 	echo "<td><form action=\"check.php\" method=\"get\"><input type=\"hidden\" name=\"$result1\" value=\"$result5\"><input type=\"submit\" value=\"Check In/Out\"></form></td><td><form action=\"delete.php\" method=\"get\"><input type=\"hidden\" name=\"delete\" value=\"$result1\"><input type=\"submit\" value=\"Delete Movie\"></form></td></tr>";
 }
-
 $stmt->close();
 
 echo '</table>';
-
-echo "<form action=\"deleteAll.php\" method=\"get\"><input type=\"submit\" value=\"Delete All Movies\"></form>";
-
+echo "<br><br><form action=\"deleteAll.php\" method=\"get\"><input type=\"submit\" value=\"Delete All Movies\"></form>";
 echo "</body></html>";
 
 $mysqli->close();
